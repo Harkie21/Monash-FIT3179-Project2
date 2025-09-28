@@ -12,11 +12,10 @@
   "width": 800,
   "height": 600,
   "projection": {
-    "type": "albers",
-    "scale": 900,
-    "rotate": [-133, 0, 0],
-    "center": [0, -27],
-    "parallels": [-18, -36]
+    "type": "conicEqualArea",
+    "scale": 950,
+    "rotate": [-134, 0, 0],
+    "center": [0, -27]
   },
   "layer": [
     {
@@ -36,14 +35,10 @@
     },
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/australia/australia-states.json",
-        "format": { "type": "topojson", "feature": "AUS_adm1" }
+        "url": "https://raw.githubusercontent.com/alwaysblazing/Australia-State-TopoJson-MapChart/main/aus-states.json",
+        "format": { "type": "topojson", "feature": "aus-states" }
       },
-      "mark": {
-        "type": "geoshape",
-        "fill": "#e5e7e9",
-        "stroke": "#bababa"
-      }
+      "mark": { "type": "geoshape", "fill": "#cccccc", "stroke": "#707070" }
     },
     {
       "data": {
@@ -53,7 +48,39 @@
           "feature": "fires_filtered_10000ha_bushfires"
         }
       },
-      "mark": { "type": "geoshape", "fill": "#e74c3c", "opacity": 0.5 }
+      "mark": { "type": "geoshape", "fill": "#d62728", "opacity": 0.6 }
+    },
+    {
+      "data": {
+        "values": [
+          {"city": "Sydney", "lat": -33.8688, "lon": 151.2093},
+          {"city": "Melbourne", "lat": -37.8136, "lon": 144.9631},
+          {"city": "Brisbane", "lat": -27.4698, "lon": 153.0251},
+          {"city": "Perth", "lat": -31.9505, "lon": 115.8605},
+          {"city": "Adelaide", "lat": -34.9285, "lon": 138.6007},
+          {"city": "Canberra", "lat": -35.2809, "lon": 149.1300},
+          {"city": "Hobart", "lat": -42.8821, "lon": 147.3272},
+          {"city": "Darwin", "lat": -12.4634, "lon": 130.8456}
+        ]
+      },
+      "encoding": {
+        "longitude": {"field": "lon", "type": "quantitative"},
+        "latitude": {"field": "lat", "type": "quantitative"}
+      },
+      "layer": [
+        { "mark": {"type": "circle", "color": "black", "size": 15} },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 5,
+            "dy": -5,
+            "fontSize": 10,
+            "fontStyle": "italic"
+          },
+          "encoding": { "text": {"field": "city", "type": "nominal"} }
+        }
+      ]
     }
   ],
   "config": { "view": { "stroke": null } }
