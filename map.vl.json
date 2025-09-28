@@ -18,22 +18,16 @@
   },
   "layer": [
     {
+      "data": { "sphere": true },
       "mark": {
         "type": "geoshape",
-        "fill": "#e9f5ff",
-        "stroke": null
-      },
-      "data": {
-        "sphere": true
+        "fill": "#e9f5ff"
       }
     },
     {
-      "data": {
-        "graticule": true
-      },
+      "data": { "graticule": true },
       "mark": {
         "type": "geoshape",
-        "fill": null,
         "stroke": "#d4e6f1",
         "strokeWidth": 0.5
       }
@@ -41,10 +35,7 @@
     {
       "data": {
         "url": "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/australia/australia-states.json",
-        "format": {
-          "type": "topojson",
-          "feature": "AUS_adm1"
-        }
+        "format": { "type": "topojson", "feature": "AUS_adm1" }
       },
       "mark": {
         "type": "geoshape",
@@ -63,14 +54,11 @@
       "mark": {
         "type": "geoshape",
         "fill": "#e74c3c",
-        "stroke": null,
         "opacity": 0.4
       }
     }
   ],
   "config": {
-    "view": {
-      "stroke": null
-    }
+    "view": { "stroke": null }
   }
 }
