@@ -13,7 +13,8 @@
   "height": 600,
   "projection": {
     "type": "albers",
-    "rotate": [-135, 0, 0],
+    "scale": 1000,
+    "rotate": [-134, 0, 0],
     "center": [0, -27]
   },
   "layer": [
@@ -34,8 +35,8 @@
     },
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/australia/australia-states.json",
-        "format": { "type": "topojson", "feature": "AUS_adm1" }
+        "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/australia.topo.json",
+        "format": { "type": "topojson", "feature": "states" }
       },
       "mark": {
         "type": "geoshape",
