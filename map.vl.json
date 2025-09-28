@@ -28,8 +28,12 @@
       }
     },
     {
+      "data": {
+        "graticule": true
+      },
       "mark": {
-        "type": "graticule",
+        "type": "geoshape",
+        "fill": null,
         "stroke": "#d4e6f1",
         "strokeWidth": 0.5
       }
