@@ -13,9 +13,10 @@
   "height": 600,
   "projection": {
     "type": "albers",
-    "scale": 850,
-    "rotate": [-134, 0, 0],
-    "center": [0, -27]
+    "scale": 900,
+    "rotate": [-133, 0, 0],
+    "center": [0, -27],
+    "parallels": [-18, -36]
   },
   "layer": [
     {
@@ -31,19 +32,18 @@
         "url": "https://cdn.jsdelivr.net/npm/vega-datasets@v1.29.0/data/world-110m.json",
         "format": { "type": "topojson", "feature": "countries" }
       },
-      "mark": {
-        "type": "geoshape",
-        "fill": "#f0ede5",
-        "stroke": "#d4d4d4"
-      }
+      "mark": { "type": "geoshape", "fill": "#f0ede5", "stroke": "#d4d4d4" }
     },
     {
       "data": {
-        "url": "https://cdn.jsdelivr.net/npm/vega-datasets@v1.29.0/data/world-110m.json",
-        "format": { "type": "topojson", "feature": "countries" }
+        "url": "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/australia/australia-states.json",
+        "format": { "type": "topojson", "feature": "AUS_adm1" }
       },
-      "transform": [{ "filter": "datum.id == 36" }],
-      "mark": { "type": "geoshape", "fill": "#cccccc", "stroke": "#707070" }
+      "mark": {
+        "type": "geoshape",
+        "fill": "#e5e7e9",
+        "stroke": "#bababa"
+      }
     },
     {
       "data": {
