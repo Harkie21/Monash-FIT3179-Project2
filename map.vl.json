@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
-    "text": "Major Bushfires in South-Eastern Australia",
+    "text": "Major Bushfires in Australia",
     "subtitle": "Fire events larger than 10,000 hectares (1999-2020)",
     "fontSize": 16,
     "subtitleFontSize": 12,
@@ -13,36 +13,37 @@
   "height": 600,
   "projection": {
     "type": "albers",
-    "scale": 1000,
+    "scale": 850,
     "rotate": [-134, 0, 0],
     "center": [0, -27]
   },
   "layer": [
     {
       "data": { "sphere": true },
-      "mark": {
-        "type": "geoshape",
-        "fill": "#e9f5ff"
-      }
+      "mark": { "type": "geoshape", "fill": "#e9f5ff" }
     },
     {
       "data": { "graticule": true },
+      "mark": { "type": "geoshape", "stroke": "#d4e6f1", "strokeWidth": 0.5 }
+    },
+    {
+      "data": {
+        "url": "https://cdn.jsdelivr.net/npm/vega-datasets@v1.29.0/data/world-110m.json",
+        "format": { "type": "topojson", "feature": "countries" }
+      },
       "mark": {
         "type": "geoshape",
-        "stroke": "#d4e6f1",
-        "strokeWidth": 0.5
+        "fill": "#f0ede5",
+        "stroke": "#d4d4d4"
       }
     },
     {
       "data": {
-        "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/australia.topo.json",
-        "format": { "type": "topojson", "feature": "states" }
+        "url": "https://cdn.jsdelivr.net/npm/vega-datasets@v1.29.0/data/world-110m.json",
+        "format": { "type": "topojson", "feature": "countries" }
       },
-      "mark": {
-        "type": "geoshape",
-        "fill": "#e5e7e9",
-        "stroke": "#bababa"
-      }
+      "transform": [{ "filter": "datum.id == 36" }],
+      "mark": { "type": "geoshape", "fill": "#cccccc", "stroke": "#707070" }
     },
     {
       "data": {
@@ -52,14 +53,8 @@
           "feature": "fires_filtered_10000ha_bushfires"
         }
       },
-      "mark": {
-        "type": "geoshape",
-        "fill": "#e74c3c",
-        "opacity": 0.4
-      }
+      "mark": { "type": "geoshape", "fill": "#e74c3c", "opacity": 0.5 }
     }
   ],
-  "config": {
-    "view": { "stroke": null }
-  }
+  "config": { "view": { "stroke": null } }
 }
