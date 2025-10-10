@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Australian Bushfires Map</title>
+    <title>Australian Bushfire Dashboard</title>
     <!-- These are the Vega-Lite libraries -->
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
@@ -9,12 +9,12 @@
 </head>
 <body>
 
-<!-- This div is where the map will be embedded -->
+<!-- This single div is where the entire dashboard will be embedded -->
 <div id="vis"></div>
 
 <script>
-    // This tells vegaEmbed to load your map definition into the 'vis' div
-    vegaEmbed('#vis', 'map.vl.json');
+    // This tells vegaEmbed to load your new dashboard definition into the 'vis' div
+    vegaEmbed('#vis', 'dashboard.vl.json');
 </script>
 
 </body>
