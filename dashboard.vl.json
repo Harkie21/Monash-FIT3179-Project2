@@ -1,0 +1,151 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Australian Bushfire History and Climate Drivers",
+    "fontSize": 20,
+    "subtitle": [
+      "Select a range of years on the bottom overview chart to filter the map and the detailed chart."
+    ],
+    "subtitleFontSize": 12,
+    "anchor": "start"
+  },
+  "config": { "view": { "stroke": null } },
+  "vconcat": [
+    {
+      "width": 800,
+      "height": 250,
+      "title": "Annual Fire Area and Climate Trends (Detailed View)",
+      "data": {"url": "climate_summary.csv"},
+      "transform": [{"filter": {"param": "year_brush"}}],
+      "layer": [
+        {
+          "mark": {"type": "bar", "color": "#d62728"},
+          "encoding": {
+            "x": {"field": "Year", "type": "ordinal", "title": null, "axis": null},
+            "y": {"field": "TotalFireArea", "type": "quantitative", "title": "Total Fire Area (million ha)"},
+            "tooltip": [
+              {"field": "Year", "type": "ordinal"},
+              {"field": "TotalFireArea", "title": "Area Burned (M ha)"},
+              {"field": "MaxTemp", "title": "Avg. Max Temp (°C)", "format": ".1f"},
+              {"field": "Precipitation", "title": "Precipitation (mm)", "format": ".0f"}
+            ]
+          }
+        },
+        {
+          "mark": {"type": "line", "color": "#ff7f0e", "strokeWidth": 2, "point": true},
+          "encoding": {
+            "x": {"field": "Year", "type": "ordinal"},
+            "y": {
+              "field": "MaxTemp", "type": "quantitative", "title": "Max Temperature (°C)",
+              "axis": {"orient": "right", "grid": false, "titleColor": "#ff7f0e"}
+            }
+          }
+        },
+        {
+          "mark": {"type": "line", "color": "#1f77b4", "strokeWidth": 2, "point": true},
+          "encoding": {
+            "x": {"field": "Year", "type": "ordinal"},
+            "y": {
+              "field": "Precipitation", "type": "quantitative", "title": "Precipitation (mm)",
+              "axis": {"orient": "right", "grid": false, "titleColor": "#1f77b4", "offset": 50}
+            }
+          }
+        },
+        {
+          "transform": [{"filter": "datum.Year == 2019"}],
+          "mark": {
+            "type": "text", "align": "left", "baseline": "middle", "dx": 3, "dy": -10,
+            "fontSize": 11, "fontStyle": "italic"
+          },
+          "encoding": {
+            "x": {"field": "Year", "type": "ordinal"},
+            "y": {"field": "TotalFireArea", "type": "quantitative"},
+            "text": {"value": "'Black Summer' Season"}
+          }
+        }
+      ],
+      "resolve": {"scale": {"y": "independent"}}
+    },
+    {
+      "width": 800,
+      "height": 600,
+      "title": "Geographic Distribution of Major Bushfires",
+      "projection": {
+        "type": "orthographic",
+        "scale": 1100,
+        "rotate": [-134, 0, 0],
+        "center": [0, -9.5]
+      },
+      "layer": [
+        {"data": {"sphere": true}, "mark": {"type": "geoshape", "fill": "#e9f5ff"}},
+        {"data": {"graticule": true}, "mark": {"type": "geoshape", "stroke": "#d4e6f1", "strokeWidth": 0.5}},
+        {
+          "data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v1.29.0/data/world-110m.json", "format": {"type": "topojson", "feature": "countries"}},
+          "mark": {"type": "geoshape", "fill": "#f0ede5", "stroke": "#d4d4d4"}
+        },
+        {
+          "data": {"url": "https://raw.githubusercontent.com/alwaysblazing/Australia-State-TopoJson-MapChart/main/aus-states.json", "format": {"type": "topojson", "feature": "aus-states"}},
+          "mark": {"type": "geoshape", "fill": "#cccccc", "stroke": "#707070"}
+        },
+        {
+          "data": {
+            "url": "fires_final.json",
+            "format": {"type": "topojson", "feature": "fires_filtered_10000ha_bushfires"}
+          },
+          "transform": [
+            {"calculate": "toString(year(datum.properties.ignition_date))", "as": "Year"},
+            {"filter": {"param": "year_brush"}}
+          ],
+          "mark": {"type": "geoshape", "fill": "#d62728", "opacity": 0.6},
+          "encoding": {
+            "tooltip": [
+              {"field": "properties.fire_name", "type": "nominal", "title": "Fire Name"},
+              {"field": "properties.state", "type": "nominal", "title": "State"},
+              {"field": "Year", "type": "ordinal", "title": "Year"},
+              {"field": "properties.area_ha", "type": "quantitative", "title": "Area (ha)", "format": ",.0f"}
+            ]
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {"city": "Sydney", "lat": -33.88, "lon": 151.21},
+              {"city": "Melbourne", "lat": -37.81, "lon": 144.96},
+              {"city": "Brisbane", "lat": -27.47, "lon": 153.02},
+              {"city": "Perth", "lat": -31.95, "lon": 115.86},
+              {"city": "Adelaide", "lat": -34.93, "lon": 138.60},
+              {"city": "Canberra", "lat": -35.28, "lon": 149.13},
+              {"city": "Hobart", "lat": -42.88, "lon": 147.33},
+              {"city": "Darwin", "lat": -12.46, "lon": 130.84}
+            ]
+          },
+          "encoding": {
+            "longitude": {"field": "lon", "type": "quantitative"},
+            "latitude": {"field": "lat", "type": "quantitative"}
+          },
+          "layer": [
+            {"mark": {"type": "circle", "color": "black", "size": 15}},
+            {"mark": {"type": "text", "align": "left", "dx": 5, "dy": -5, "fontSize": 10, "fontStyle": "italic"}, "encoding": {"text": {"field": "city", "type": "nominal"}}}
+          ]
+        }
+      ]
+    },
+    {
+      "width": 800,
+      "height": 60,
+      "title": "Overview and Selection",
+      "data": {"url": "climate_summary.csv"},
+      "params": [
+        {"name": "year_brush", "select": {"type": "interval", "encodings": ["x"]}}
+      ],
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal", "title": "Year"},
+        "y": {
+          "field": "TotalFireArea", "type": "quantitative",
+          "title": null, "axis": {"labels": false}
+        }
+      }
+    }
+  ]
+}
