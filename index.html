@@ -7,12 +7,15 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
     <style>
-        body { font-family: sans-serif; }
-        #data-table, #debug-table { margin-top: 40px; }
-        table { border-collapse: collapse; width: 600px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        tfoot { font-weight: bold; }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            font-family: sans-serif;
+        }
+        #vis {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -20,174 +23,9 @@
 <!-- This single div is where the entire dashboard will be embedded -->
 <div id="vis"></div>
 
-<!-- This new div will hold our data validation table -->
-<div id="data-table"></div>
-
-<!-- This new div will hold our debug table for 2012 -->
-<div id="debug-table"></div>
-
 <script>
-    // This tells vegaEmbed to load your dashboard definition into the 'vis' div
+    // This tells vegaEmbed to load your new dashboard definition into the 'vis' div
     vegaEmbed('#vis', 'dashboard.vl.json');
-</script>
-
-<!-- This new script block will load the data and print the table -->
-<script>
-    // This is an async function to handle loading files
-    async function createValidationTable() {
-        // --- 1. Load and process the TopoJSON data ---
-        const topoResponse = await fetch('fires_final.json');
-        const topoData = await topoResponse.json();
-
-        const aggregatedData = {};
-        const uniqueFires = new Set(); // Use a Set to track unique fires
-        const geometries = topoData.objects.fires_filtered_10000ha_bushfires.geometries;
-
-        for (const feature of geometries) {
-            const props = feature.properties;
-            if (props && props.ignition_date && props.area_ha) {
-                // Create a unique key for each fire based on its name and area
-                const uniqueKey = `${props.fire_name}_${props.area_ha}`;
-
-                // If we've already seen this exact fire, skip it
-                if (uniqueFires.has(uniqueKey)) {
-                    continue;
-                }
-                // Otherwise, add it to our set of seen fires and process it
-                uniqueFires.add(uniqueKey);
-
-                const year = new Date(props.ignition_date).getFullYear();
-                const area = props.area_ha;
-
-                if (!aggregatedData[year]) {
-                    aggregatedData[year] = 0;
-                }
-                aggregatedData[year] += area;
-            }
-        }
-
-        // --- 2. Build the HTML table as a string ---
-        let tableHTML = `
-            <h2>Validation: Total Area from TopoJSON (>10,000ha fires) - DE-DUPLICATED</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Total M ha Burnt (from TopoJSON)</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        // Get the years, sort them, and create a table row for each
-        const sortedYears = Object.keys(aggregatedData).sort();
-
-        for (const year of sortedYears) {
-            const totalHectares = aggregatedData[year];
-            const totalMillionHectares = (totalHectares / 1000000).toFixed(2); // Convert to M ha and format
-            tableHTML += `
-                <tr>
-                    <td>${year}</td>
-                    <td>${totalMillionHectares}</td>
-                </tr>
-            `;
-        }
-
-        tableHTML += `
-                </tbody>
-            </table>
-        `;
-
-        // --- 3. Inject the HTML into the page ---
-        document.getElementById('data-table').innerHTML = tableHTML;
-    }
-
-    // Run the function to create the table
-    createValidationTable();
-</script>
-
-<!-- This new script block will debug the 2012 data -->
-<script>
-    async function create2012DebugTable() {
-        // --- 1. Load the TopoJSON data ---
-        const topoResponse = await fetch('fires_final.json');
-        const topoData = await topoResponse.json();
-
-        // --- 2. Filter for 2012 fires and calculate sum, ensuring uniqueness ---
-        const fires2012 = [];
-        let sum2012_ha = 0;
-        const uniqueFires2012 = new Set(); // Use a Set to track unique fires for 2012
-        const geometries = topoData.objects.fires_filtered_10000ha_bushfires.geometries;
-
-        for (const feature of geometries) {
-            const props = feature.properties;
-            if (props && props.ignition_date && props.area_ha) {
-                const year = new Date(props.ignition_date).getFullYear();
-                if (year === 2019) {
-                    // Create a unique key for each fire based on its name and area
-                    const uniqueKey = `${props.fire_name}_${props.area_ha}`;
-
-                    // If we've already seen this exact fire, skip it
-                    if (uniqueFires2012.has(uniqueKey)) {
-                        continue;
-                    }
-                    // Otherwise, add it to our set of seen fires and process it
-                    uniqueFires2012.add(uniqueKey);
-
-                    fires2012.push({
-                        name: props.fire_name || 'Unnamed Fire',
-                        area: props.area_ha
-                    });
-                    sum2012_ha += props.area_ha;
-                }
-            }
-        }
-
-        // --- 3. Build the HTML table as a string ---
-        let tableHTML = `
-            <h2>Debug: Individual Fires for 2012 - DE-DUPLICATED</h2>
-            <p>The table above shows a very large value of 68.23 M ha for 2012. This table breaks down the individual fires from 2012 to investigate that total.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Fire Name</th>
-                        <th>Area (Hectares)</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        // Sort fires by area, largest first, for easier analysis
-        fires2012.sort((a, b) => b.area - a.area);
-
-        for (const fire of fires2012) {
-            tableHTML += `
-                <tr>
-                    <td>${fire.name}</td>
-                    <td>${fire.area.toLocaleString()}</td>
-                </tr>
-            `;
-        }
-
-        const sum2012_Mha = (sum2012_ha / 1000000).toFixed(2);
-
-        tableHTML += `
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td><strong>Total Sum</strong></td>
-                        <td><strong>${sum2012_ha.toLocaleString()} ha (${sum2012_Mha} M ha)</strong></td>
-                    </tr>
-                </tfoot>
-            </table>
-        `;
-
-        // --- 4. Inject the HTML into the page ---
-        document.getElementById('debug-table').innerHTML = tableHTML;
-    }
-
-    // Run the function to create the debug table
-    create2012DebugTable();
 </script>
 
 </body>
