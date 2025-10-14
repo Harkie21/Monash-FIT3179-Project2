@@ -18,7 +18,7 @@
       "projection": {
         "scale": 800,
         "rotate": [-134, 0, 0],
-        "center": [-115, -9.5]
+        "center": [-78, -9.5]
       },
       "layer": [
         {"data": {"sphere": true}, "mark": {"type": "geoshape", "fill": "#e9f5ff"}},
@@ -78,7 +78,7 @@
     {
       "hconcat": [
         {
-          "width": 400,
+          "width": "container",
           "height": 250,
           "title": "Annual Fire Area and Climate Trends",
           "data": {"url": "climate_summary.csv"},
@@ -133,7 +133,7 @@
           "resolve": {"scale": {"y": "independent"}}
         },
         {
-          "width": 400,
+          "width": "container",
           "height": 250,
           "title": "Total Mega-Fire Area by State",
           "data": {

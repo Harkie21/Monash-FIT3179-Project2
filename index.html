@@ -10,11 +10,14 @@
         html, body {
             margin: 0;
             padding: 0;
-            width: 100%;
+            max-width: 95%;
             font-family: sans-serif;
+            align-content: center;
+            horiz-align: center;
         }
         #vis {
             width: 100%;
+            align-content: center;
         }
     </style>
 </head>
@@ -25,7 +28,10 @@
 
 <script>
     // This tells vegaEmbed to load your new dashboard definition into the 'vis' div
-    vegaEmbed('#vis', 'dashboard.vl.json');
+    vegaEmbed('#vis', 'dashboard.vl.json').then(() => {
+        // This event dispatch forces the chart to re-evaluate its container size after rendering
+        window.dispatchEvent(new Event('resize'));
+    });
 </script>
 
 </body>
