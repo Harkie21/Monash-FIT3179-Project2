@@ -150,44 +150,25 @@
     {
       "width": 800,
       "height": 200,
-      "title": "Data Source Comparison: Total Area Burned (1999-2020)",
+      "title": "Data Source Comparison: Total Area Burned (1990-2020)",
       "layer": [
         {
           "data": {"url": "climate_summary.csv"},
-          "transform": [
-            {"calculate": "'National Summary (All Fires)'", "as": "Source"},
-            {"calculate": "datum.TotalFireArea", "as": "AreaMillionHectares"}
-          ],
+          "transform": [{"calculate": "'National Summary (All Fires)'", "as": "Source"}],
           "mark": {"type": "line", "point": true, "strokeDash": [8, 4]},
           "encoding": {
+            "y": {"field": "TotalFireArea", "type": "quantitative"},
             "color": {"field": "Source", "type": "nominal", "title": "Data Source"}
           }
         },
         {
-          "data": {
-            "url": "fires_final.json",
-            "format": {
-              "type": "topojson",
-              "feature": "fires_filtered_10000ha_bushfires"
-            }
-          },
+          "data": {"url": "fires_deduplicated_summary.csv"},
           "transform": [
-            {"calculate": "year(datum.properties.ignition_date)", "as": "YearNum"},
-            {
-              "aggregate": [
-                {"op": "sum", "field": "properties.area_ha", "as": "TotalHectares"}
-              ],
-              "groupby": ["YearNum"]
-            },
-            {
-              "calculate": "datum.TotalHectares / 100000",
-              "as": "AreaMillionHectares"
-            },
-            {"calculate": "toString(datum.YearNum)", "as": "Year"},
-            {"calculate": "'Filtered Fires (>10,000ha)'", "as": "Source"}
+            {"calculate": "'De-duplicated Mega-Fires (>10,000ha)'", "as": "Source"}
           ],
           "mark": {"type": "line", "point": true},
           "encoding": {
+            "y": {"field": "AreaMillionHectares", "type": "quantitative"},
             "color": {"field": "Source", "type": "nominal"}
           }
         }
@@ -195,17 +176,19 @@
       "encoding": {
         "x": {"field": "Year", "type": "ordinal", "title": "Year"},
         "y": {
-          "field": "AreaMillionHectares",
-          "type": "quantitative",
           "title": "Area (Million Hectares)"
         },
         "tooltip": [
           {"field": "Year", "type": "ordinal"},
           {"field": "Source", "type": "nominal"},
           {
+            "field": "TotalFireArea",
+            "title": "National Summary (M ha)",
+            "format": ".2f"
+          },
+          {
             "field": "AreaMillionHectares",
-            "type": "quantitative",
-            "title": "Area (M ha)",
+            "title": "Mega-Fires (M ha)",
             "format": ".2f"
           }
         ]

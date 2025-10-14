@@ -40,11 +40,22 @@
         const topoData = await topoResponse.json();
 
         const aggregatedData = {};
+        const uniqueFires = new Set(); // Use a Set to track unique fires
         const geometries = topoData.objects.fires_filtered_10000ha_bushfires.geometries;
 
         for (const feature of geometries) {
             const props = feature.properties;
             if (props && props.ignition_date && props.area_ha) {
+                // Create a unique key for each fire based on its name and area
+                const uniqueKey = `${props.fire_name}_${props.area_ha}`;
+
+                // If we've already seen this exact fire, skip it
+                if (uniqueFires.has(uniqueKey)) {
+                    continue;
+                }
+                // Otherwise, add it to our set of seen fires and process it
+                uniqueFires.add(uniqueKey);
+
                 const year = new Date(props.ignition_date).getFullYear();
                 const area = props.area_ha;
 
@@ -57,7 +68,7 @@
 
         // --- 2. Build the HTML table as a string ---
         let tableHTML = `
-            <h2>Validation: Total Area from TopoJSON (>10,000ha fires)</h2>
+            <h2>Validation: Total Area from TopoJSON (>10,000ha fires) - DE-DUPLICATED</h2>
             <table>
                 <thead>
                     <tr>
@@ -102,16 +113,27 @@
         const topoResponse = await fetch('fires_final.json');
         const topoData = await topoResponse.json();
 
-        // --- 2. Filter for 2012 fires and calculate sum ---
+        // --- 2. Filter for 2012 fires and calculate sum, ensuring uniqueness ---
         const fires2012 = [];
         let sum2012_ha = 0;
+        const uniqueFires2012 = new Set(); // Use a Set to track unique fires for 2012
         const geometries = topoData.objects.fires_filtered_10000ha_bushfires.geometries;
 
         for (const feature of geometries) {
             const props = feature.properties;
             if (props && props.ignition_date && props.area_ha) {
                 const year = new Date(props.ignition_date).getFullYear();
-                if (year === 2012) {
+                if (year === 2019) {
+                    // Create a unique key for each fire based on its name and area
+                    const uniqueKey = `${props.fire_name}_${props.area_ha}`;
+
+                    // If we've already seen this exact fire, skip it
+                    if (uniqueFires2012.has(uniqueKey)) {
+                        continue;
+                    }
+                    // Otherwise, add it to our set of seen fires and process it
+                    uniqueFires2012.add(uniqueKey);
+
                     fires2012.push({
                         name: props.fire_name || 'Unnamed Fire',
                         area: props.area_ha
@@ -123,7 +145,7 @@
 
         // --- 3. Build the HTML table as a string ---
         let tableHTML = `
-            <h2>Debug: Individual Fires for 2012</h2>
+            <h2>Debug: Individual Fires for 2012 - DE-DUPLICATED</h2>
             <p>The table above shows a very large value of 68.23 M ha for 2012. This table breaks down the individual fires from 2012 to investigate that total.</p>
             <table>
                 <thead>
