@@ -1,87 +1,126 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": {
-    "text": "Major Bushfires in Australia",
-    "subtitle": "Fire events larger than 10,000 hectares (1999-2020)",
-    "fontSize": 16,
-    "subtitleFontSize": 12,
-    "anchor": "start",
-    "color": "#34495E",
-    "subtitleColor": "#7F8C8D"
-  },
-  "width": 800,
-  "height": 600,
-  "projection": {
-    "type": "conicEqualArea",
-    "scale": 950,
-    "rotate": [-134, 0, 0],
-    "center": [0, -27]
-  },
-  "layer": [
+  "vconcat": [
     {
-      "data": { "sphere": true },
-      "mark": { "type": "geoshape", "fill": "#e9f5ff" }
-    },
-    {
-      "data": { "graticule": true },
-      "mark": { "type": "geoshape", "stroke": "#d4e6f1", "strokeWidth": 0.5 }
-    },
-    {
-      "data": {
-        "url": "https://cdn.jsdelivr.net/npm/vega-datasets@v1.29.0/data/world-110m.json",
-        "format": { "type": "topojson", "feature": "countries" }
-      },
-      "mark": { "type": "geoshape", "fill": "#f0ede5", "stroke": "#d4d4d4" }
-    },
-    {
-      "data": {
-        "url": "https://raw.githubusercontent.com/alwaysblazing/Australia-State-TopoJson-MapChart/main/aus-states.json",
-        "format": { "type": "topojson", "feature": "aus-states" }
-      },
-      "mark": { "type": "geoshape", "fill": "#cccccc", "stroke": "#707070" }
-    },
-    {
-      "data": {
-        "url": "fires_final.json",
-        "format": {
-          "type": "topojson",
-          "feature": "fires_filtered_10000ha_bushfires"
-        }
-      },
-      "mark": { "type": "geoshape", "fill": "#d62728", "opacity": 0.6 }
-    },
-    {
-      "data": {
-        "values": [
-          {"city": "Sydney", "lat": -33.8688, "lon": 151.2093},
-          {"city": "Melbourne", "lat": -37.8136, "lon": 144.9631},
-          {"city": "Brisbane", "lat": -27.4698, "lon": 153.0251},
-          {"city": "Perth", "lat": -31.9505, "lon": 115.8605},
-          {"city": "Adelaide", "lat": -34.9285, "lon": 138.6007},
-          {"city": "Canberra", "lat": -35.2809, "lon": 149.1300},
-          {"city": "Hobart", "lat": -42.8821, "lon": 147.3272},
-          {"city": "Darwin", "lat": -12.4634, "lon": 130.8456}
-        ]
-      },
-      "encoding": {
-        "longitude": {"field": "lon", "type": "quantitative"},
-        "latitude": {"field": "lat", "type": "quantitative"}
+      "width": "container",
+      "height": 550,
+      "config": {"view": {"stroke": null}},
+      "projection": {
+        "type": "orthographic",
+        "scale": 1000,
+        "rotate": [-135, 0, 0],
+        "center": [0, -9]
       },
       "layer": [
-        { "mark": {"type": "circle", "color": "black", "size": 15} },
         {
-          "mark": {
-            "type": "text",
-            "align": "left",
-            "dx": 5,
-            "dy": -5,
-            "fontSize": 10,
-            "fontStyle": "italic"
+          "data": {"sphere": true},
+          "mark": {"type": "geoshape", "fill": "#d4e6f1"}
+        },
+        {
+          "data": {
+            "url": "au-states-topo.json",
+            "format": {"type": "topojson", "feature": "austates"}
           },
-          "encoding": { "text": {"field": "city", "type": "nominal"} }
+          "mark": {"type": "geoshape", "fill": "#F9F9F9", "stroke": "#D6CFCB"}
+        },
+        {
+          "data": {
+            "url": "fires_final.json",
+            "format": {"type": "topojson", "feature": "fires_filtered_10000ha_bushfires"}
+          },
+          "params": [
+            {
+              "name": "fire_hover",
+              "select": {"type": "point", "on": "pointerover"}
+            }
+          ],
+          "transform": [
+            {"calculate": "toString(year(datum.properties.ignition_date))", "as": "Year"},
+            {"filter": {"param": "year_brush"}}
+          ],
+          "mark": {"type": "geoshape", "opacity": 0.9},
+          "encoding": {
+            "color": {
+              "field": "properties.area_ha",
+              "type": "quantitative",
+              "title": "Fire Size (ha)",
+              "scale": {"scheme": "orangered", "range": ["#F28C28", "#8B0000"]},
+              "legend": {
+                "orient": "bottom",
+                "offset": -2
+              }
+            },
+            "stroke": {
+              "condition": {"selection": "fire_hover", "value": "black"},
+              "value": null
+            },
+            "strokeWidth": {
+              "condition": {"selection": "fire_hover", "value": 1},
+              "value": 0
+            },
+            "tooltip": [
+              {"field": "properties.fire_name", "type": "nominal", "title": "Location"},
+              {"field": "properties.state", "type": "nominal", "title": "State"},
+              {"field": "Year", "type": "ordinal", "title": "Year"},
+              {"field": "properties.area_ha", "type": "quantitative", "title": "Area (ha)", "format": ",.0f"}
+            ]
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {"city": "Sydney", "lat": -33.88, "lon": 151.21},
+              {"city": "Melbourne", "lat": -37.81, "lon": 144.96},
+              {"city": "Brisbane", "lat": -27.47, "lon": 153.02},
+              {"city": "Perth", "lat": -31.95, "lon": 115.86},
+              {"city": "Adelaide", "lat": -34.93, "lon": 138.60},
+              {"city": "Canberra", "lat": -35.28, "lon": 149.13},
+              {"city": "Hobart", "lat": -42.88, "lon": 147.33},
+              {"city": "Darwin", "lat": -12.46, "lon": 130.84}
+            ]
+          },
+          "encoding": {
+            "longitude": {"field": "lon", "type": "quantitative"},
+            "latitude": {"field": "lat", "type": "quantitative"}
+          },
+          "layer": [
+            {"mark": {"type": "circle", "color": "#3D405B", "size": 15}},
+            {
+              "mark": {
+                "type": "text",
+                "align": "left",
+                "dx": 5,
+                "dy": -5,
+                "fontSize": 10,
+                "fontStyle": "italic",
+                "color": "#3D405B"
+              },
+              "encoding": {"text": {"field": "city", "type": "nominal"}}
+            }
+          ]
         }
       ]
+    },
+    {
+      "width": "container",
+      "height": 60,
+      "data": {"url": "fires_deduplicated_summary.csv"},
+      "transform": [
+        {"filter": "datum.Year >= 1993 && datum.Year <= 2023"}
+      ],
+      "params": [
+        {"name": "year_brush", "select": {"type": "interval", "encodings": ["x"]}}
+      ],
+      "mark": {"type": "bar", "cornerRadiusEnd": 4, "color": "#8B0000"},
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal", "title": "Year"},
+        "y": {
+          "field": "AreaMillionHectares",
+          "type": "quantitative",
+          "title": null,
+          "axis": {"labels": false}
+        }
+      }
     }
-  ],
-  "config": { "view": { "stroke": null } }
+  ]
 }
