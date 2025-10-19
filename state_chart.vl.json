@@ -1,0 +1,97 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 420,
+  "autosize": {"type": "fit-x", "contains": "padding"},
+  "data": {"url": "fires_deduplicated_summary2.csv"},
+  "transform": [
+    {"filter": "datum.Year >= 1993 && datum.Year <= 2023"},
+    {
+      "joinaggregate": [
+        {"op": "sum", "field": "AreaMillionHectares", "as": "TotalAreaState"}
+      ],
+      "groupby": ["State"]
+    }
+  ],
+  "params": [
+    {
+      "name": "year_highlight",
+      "value": null,
+      "bind": {
+        "input": "select",
+        "name": "Highlight Year: ",
+        "options": [null, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
+        "labels": ["Show All", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"]
+      }
+    }
+  ],
+  "layer": [
+    {
+      "mark": {"type": "bar", "stroke": "#D6CFCB", "strokeWidth": 0.5},
+      "encoding": {
+        "y": {
+          "field": "State",
+          "type": "nominal",
+          "title": "State",
+          "sort": {"field": "TotalAreaState", "order": "descending"}
+        },
+        "x": {
+          "aggregate": "sum",
+          "field": "AreaMillionHectares",
+          "type": "quantitative",
+          "title": "Total Area Burned (Million Hectares)"
+        },
+        "order": {"field": "Year", "type": "ordinal"},
+        "color": {
+          "field": "Year",
+          "type": "ordinal",
+          "legend": null,
+          "scale": {"range": ["#C7C7C7"]}
+        },
+        "tooltip": [
+          {"field": "State", "type": "nominal"},
+          {"field": "Year", "type": "ordinal", "title": "Year"},
+          {"aggregate": "sum", "field": "AreaMillionHectares", "type": "quantitative", "title": "Area (M ha)", "format": ".2f"}
+        ]
+      }
+    },
+    {
+      "transform": [
+        {"filter": "year_highlight == null ? false : (isArray(year_highlight) ? indexof(year_highlight, toString(datum.Year)) >= 0 : toString(datum.Year) == toString(year_highlight))"}
+      ],
+      "mark": {"type": "bar", "color": "#8B0000"},
+      "encoding": {
+        "y": {
+          "field": "State",
+          "type": "nominal",
+          "sort": {"field": "TotalAreaState", "order": "descending"}
+        },
+        "x": {
+          "aggregate": "sum",
+          "field": "AreaMillionHectares",
+          "type": "quantitative"
+        },
+        "order": {"field": "Year", "type": "ordinal"}
+      }
+    },
+    {
+      "transform": [
+        {"filter": "year_highlight == null ? false : (isArray(year_highlight) ? indexof(year_highlight, toString(datum.Year)) >= 0 : toString(datum.Year) == toString(year_highlight))"},
+        {
+          "aggregate": [
+            {"op": "sum", "field": "AreaMillionHectares", "as": "SelAreaM"},
+            {"op": "sum", "field": "AreaHectares", "as": "SelAreaHa"}
+          ],
+          "groupby": ["State"]
+        },
+        {"calculate": "format(datum.SelAreaHa, ',.0f') + ' ha'", "as": "SelAreaHaLabel"}
+      ],
+      "mark": {"type": "text", "align": "left", "baseline": "middle", "dx": 4, "fontSize": 11, "color": "#333333"},
+      "encoding": {
+        "y": {"field": "State", "type": "nominal", "sort": {"field": "TotalAreaState", "order": "descending"}},
+        "x": {"field": "SelAreaM", "type": "quantitative"},
+        "text": {"field": "SelAreaHaLabel", "type": "nominal"}
+      }
+    }
+  ]
+}

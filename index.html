@@ -82,11 +82,32 @@
             display: flex;
             flex-wrap: wrap;
             gap: 30px;
+            align-items: stretch;
         }
 
         .split-container .column {
             flex: 1;
             min-width: 400px; /* Ensures charts don't get too small */
+        }
+
+        .discussion-pane {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--light-bg);
+            padding: 18px 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .discussion-pane h3 {
+            margin: 0 0 6px 0;
+            font-size: 1.1rem;
+        }
+
+        .discussion-pane p {
+            color: var(--primary-text);
         }
 
         footer {
@@ -142,22 +163,49 @@
     <div class="vis-container" id="map_div"></div>
 </section>
 
-<section id="charts-section">
+<section id="state-section">
+    <h2>Total Area Burned by State</h2>
     <div class="split-container">
         <div class="column">
-            <h2>Annual Fire & Climate Trends</h2>
+            <div class="discussion-pane">
+                <h3>Discussion</h3>
+                <p>Add your commentary on state-level mega-fire impacts here. Highlight standout states and years, compare totals, and relate to known fire seasons.</p>
+            </div>
+        </div>
+        <div class="column">
+            <div class="vis-container" id="state_chart_div"></div>
+        </div>
+    </div>
+</section>
+
+<section id="climate-section">
+    <h2>Annual Fire & Climate Trends</h2>
+    <div class="split-container">
+        <div class="column">
             <div class="vis-container" id="climate_chart_div"></div>
         </div>
         <div class="column">
-            <h2>Total Area Burned by State</h2>
-            <div class="vis-container" id="state_chart_div"></div>
+            <div class="discussion-pane">
+                <h3>Discussion</h3>
+                <p>Use this space to discuss trends between temperature, precipitation, and burned area. Note anomalies and how they align with major fire seasons.</p>
+            </div>
         </div>
     </div>
 </section>
 
 <section id="overview-section">
     <h2>Timeline Overview & Selection</h2>
-    <div class="vis-container" id="overview_chart_div"></div>
+    <div class="split-container">
+        <div class="column">
+            <div class="discussion-pane">
+                <h3>Discussion</h3>
+                <p>Describe how to use the timeline selection to focus the dashboard and reflect on notable periods (e.g., 2002–2003, 2019–2020). You can also outline what insights to look for after brushing a range.</p>
+            </div>
+        </div>
+        <div class="column">
+            <div class="vis-container" id="overview_chart_div"></div>
+        </div>
+    </div>
 </section>
 
 <footer>
