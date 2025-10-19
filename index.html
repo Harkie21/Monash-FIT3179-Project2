@@ -97,6 +97,36 @@
             margin-top: 50px;
             font-size: 0.9rem;
         }
+
+        /* Right-align Vega-Lite bindings (city select + zoom slider) in the map container */
+        #map_div .vega-bindings {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+        }
+
+        /* Make the disabled slider visually clear */
+        #map_div .vega-bindings input[type="range"]:disabled {
+            opacity: 0.5;
+            filter: grayscale(100%);
+            cursor: not-allowed;
+        }
+
+        /* Optional width so the slider looks tidy */
+        #map_div .vega-bindings input[type="range"] {
+            max-width: 320px;
+        }
+
+        /* Small help text shown when zoom is disabled */
+        #map_div .zoom-hint {
+            text-align: right;
+            margin: 0 12px 8px 12px;
+            color: var(--text-muted);
+            font-size: 12px;
+            display: none; /* JS toggles this */
+        }
     </style>
 </head>
 <body>
@@ -136,7 +166,45 @@
 
 <script>
     // These will embed the individual charts into their respective divs.
-    vegaEmbed('#map_div', 'map.vl.json');
+    vegaEmbed('#map_div', 'map.vl.json').then(function (res) {
+        var container = document.querySelector('#map_div');
+        if (!container) return;
+
+        var bindings = container.querySelector('.vega-bindings');
+        var zoomInput = container.querySelector('input[type="range"]');
+        var citySelect = container.querySelector('select');
+        if (!bindings || !zoomInput || !citySelect) return;
+
+        // Right-align controls via inline styles as a fallback (global CSS also provided)
+        bindings.style.display = 'flex';
+        bindings.style.justifyContent = 'flex-end';
+        bindings.style.gap = '12px';
+        bindings.style.alignItems = 'center';
+
+        var message = 'Zooming is only available by selecting a city.';
+
+        // Create a small hint element shown only when zoom is disabled
+        var hint = document.createElement('div');
+        hint.className = 'zoom-hint';
+        hint.textContent = message;
+
+        // Place the hint right below the controls, aligned to the right
+        bindings.insertAdjacentElement('afterend', hint);
+
+        function syncZoomControl() {
+            var disabled = citySelect.value === 'Australia Overall';
+            zoomInput.disabled = disabled;
+            zoomInput.title = disabled ? message : '';
+            citySelect.title = disabled ? 'Select a specific city to enable zoom.' : '';
+            zoomInput.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+            hint.style.display = disabled ? 'block' : 'none';
+        }
+
+        // Initialize and listen for changes in city selection
+        syncZoomControl();
+        citySelect.addEventListener('change', syncZoomControl);
+    }).catch(console.error);
+
     vegaEmbed('#climate_chart_div', 'climate_chart.vl.json');
     vegaEmbed('#state_chart_div', 'state_chart.vl.json');
     vegaEmbed('#overview_chart_div', 'overview_chart.vl.json');

@@ -1,5 +1,17 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "params": [
+    {
+      "name": "zoom",
+      "value": 1000,
+      "bind": {"input": "range", "min": 3000, "max": 10000, "step": 50, "name": "Zoom: "}
+    },
+    {
+      "name": "city",
+      "value": "Australia Overall",
+      "bind": {"input": "select", "options": ["Australia Overall","Central Australia","Sydney","Melbourne","Brisbane","Perth","Adelaide","Canberra","Hobart","Darwin"], "name": "Center on: "}
+    }
+  ],
   "vconcat": [
     {
       "width": "container",
@@ -7,9 +19,11 @@
       "config": {"view": {"stroke": null}},
       "projection": {
         "type": "orthographic",
-        "scale": 1000,
-        "rotate": [-135, 0, 0],
-        "center": [0, -9]
+        "scale": {"expr": "city=='Australia Overall'?950:zoom"},
+        "rotate": {
+          "expr": "[city=='Australia Overall'?-135:city=='Central Australia'?-135:city=='Sydney'?-151.21:city=='Melbourne'?-144.96:city=='Brisbane'?-153.02:city=='Perth'?-115.86:city=='Adelaide'?-138.60:city=='Canberra'?-149.13:city=='Hobart'?-147.33:city=='Darwin'?-130.84:-135, city=='Australia Overall'?25:city=='Central Australia'?25:city=='Sydney'?33.88:city=='Melbourne'?37.81:city=='Brisbane'?27.47:city=='Perth'?31.95:city=='Adelaide'?34.93:city=='Canberra'?35.28:city=='Hobart'?42.88:city=='Darwin'?12.46:0, 0]"
+        },
+        "center": {"expr": "city=='Australia Overall'?[0,15]:[0,2.5]"}
       },
       "layer": [
         {
@@ -91,7 +105,7 @@
                 "align": "left",
                 "dx": 5,
                 "dy": -5,
-                "fontSize": 10,
+                "fontSize": 13,
                 "fontStyle": "italic",
                 "color": "#3D405B"
               },
@@ -120,6 +134,16 @@
           "title": null,
           "axis": {"labels": false}
         }
+      }
+    },
+    {
+      "width": "container",
+      "height": 24,
+      "mark": {"type": "text", "align": "center", "baseline": "top", "dx": 0, "fontSize": 12, "color": "#818D9D"},
+      "data": {"values": [{"note": "Tip: Select a range of years to filter fires. Drag the selection left or right to move it. Click once to clear."}]},
+      "encoding": {
+        "x": {"expr": "width/2"},
+        "text": {"field": "note", "type": "nominal"}
       }
     }
   ]
