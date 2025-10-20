@@ -13,13 +13,13 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --primary-text: #3D405B; /* Deep charcoal */
             --accent: #E07A5F; /* Burnt orange */
-            --light-bg: #F4F1DE; /* Creamy beige */
+            --light-bg: #fcdccb; /* Creamy beige */
             --border: #D6CFCB; /* Soft grey-brown */
             --text-muted: #818D9D; /* Muted grey-blue */
         }
@@ -31,7 +31,7 @@
         }
 
         body {
-            font-family: "Inter", Arial, sans-serif;
+            font-family: "Lato", Arial, sans-serif;
             color: var(--primary-text);
             background: #fff;
             max-width: 1800px;
@@ -48,7 +48,7 @@
         }
 
         header h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 10px;
         }
 
@@ -60,6 +60,14 @@
         }
 
         section {
+            margin-bottom: 50px;
+        }
+
+        section.intro {
+            background: var(--light-bg);
+            border-left: 5px solid var(--accent);
+            padding: 25px 30px;
+            border-radius: 8px;
             margin-bottom: 50px;
         }
 
@@ -158,6 +166,13 @@
     </p>
 </header>
 
+<section class="intro">
+    <h2>Navigating the Dashboard</h2>
+    <p>
+        This visualisation provides multiple perspectives on Australia's major bushfire seasons. The map below shows the geographic distribution of fires for a selected year, while the charts further down explore the data by state, cause, and climate conditions. Use the year slider on the map to explore temporal patterns, and hover over any chart element to see detailed information.
+    </p>
+</section>
+
 <section id="map-section">
     <h2>Geographic Distribution of Major Bushfires</h2>
     <div class="vis-container" id="map_div"></div>
@@ -168,8 +183,23 @@
     <div class="split-container">
         <div class="column">
             <div class="discussion-pane">
-                <h3>Discussion</h3>
-                <p>Add your commentary on state-level mega-fire impacts here. Highlight standout states and years, compare totals, and relate to known fire seasons.</p>
+                <h3>Discussion: Relative Impact of Mega-Fires by State</h3>
+                <p>
+                    While raw data often shows that the largest states like Western Australia and Queensland have the greatest total area burned, this can be misleading. Normalising the data by each state's total land area reveals a much more nuanced and insightful story about the <em>relative impact</em> of major bushfires across the country. This chart displays the cumulative percentage of each state's entire landmass that has been burned by mega-fires (>10,000 ha) since 1927.
+                </p>
+                <p>
+                    The results are striking. We can see that the Australian Capital Territory (ACT) and Victoria, despite their small size, have experienced a disproportionately high impact from catastrophic fire events over the last century.
+                </p>
+                <h3>Key Findings</h3>
+                <p>
+                    <strong>The ACT's Extreme Vulnerability:</strong> The most significant finding is the extreme vulnerability of the ACT. The data reveals that the 2003 Canberra bushfires burned an area equivalent to <strong>111.5%</strong> of the territory's entire landmass. This astonishing figure highlights that a single fire event can consume an entire administrative region, posing a unique threat to the nation's capital.
+                </p>
+                <p>
+                    <strong>Victoria's Repeated Catastrophes:</strong> Victoria shows the second-highest cumulative percentage burned. This is not due to one single event but a history of repeated, devastating fire seasons. Highlighting key years reveals the story: the 1939 "Black Friday" fires (14.7%), the 2006 fires (19.6%), and the 2009 "Black Saturday" fires (8.8%).
+                </p>
+                <p>
+                    <strong>The Misleading Scale of Large States:</strong> In contrast, while Western Australia has a huge raw area burned, the normalised data proves that the relative impact on smaller, more densely populated states can be far more severe. This analysis confirms that simply measuring total hectares is not enough to understand the true impact of a fire season.
+                </p>
             </div>
         </div>
         <div class="column">
@@ -180,30 +210,49 @@
 
 <section id="climate-section">
     <h2>Annual Fire & Climate Trends</h2>
+    <!-- Row for the two climate charts -->
     <div class="split-container">
         <div class="column">
             <div class="vis-container" id="climate_chart_div"></div>
         </div>
         <div class="column">
+            <div class="vis-container" id="overview_chart_div"></div>
+        </div>
+    </div>
+    <!-- Row for the two climate discussion panes -->
+    <div class="split-container" style="margin-top: 30px;">
+        <div class="column">
             <div class="discussion-pane">
-                <h3>Discussion</h3>
-                <p>Use this space to discuss trends between temperature, precipitation, and burned area. Note anomalies and how they align with major fire seasons.</p>
+                <h3>Discussion: Temperature Trends</h3>
+                <p>Use this space to discuss the correlation between rising maximum temperatures and the frequency or scale of major fire seasons like the 2019 'Black Summer'.</p>
+            </div>
+        </div>
+        <div class="column">
+            <div class="discussion-pane">
+                <h3>Discussion: The Rainfall Connection</h3>
+                <p>
+                    There is a strong visible correlation between years with low rainfall and years with a high total area burned by mega-fires.
+                    The orange circles on the precipitation chart highlight years where rainfall dropped by more than 100mm compared to the year prior.
+                </p>
+                <p>
+                    <strong>Finding:</strong> Our analysis shows that in these years of significant rainfall decline, there was an <strong>80% chance</strong> of an increase in the total area burned by mega-fires. This provides strong evidence that drought conditions are a key driver of catastrophic fire seasons.
+                </p>
             </div>
         </div>
     </div>
 </section>
 
-<section id="overview-section">
-    <h2>Timeline Overview & Selection</h2>
+<section id="cause-section">
+    <h2>Total Area Burned by Ignition Cause</h2>
     <div class="split-container">
         <div class="column">
-            <div class="discussion-pane">
-                <h3>Discussion</h3>
-                <p>Describe how to use the timeline selection to focus the dashboard and reflect on notable periods (e.g., 2002–2003, 2019–2020). You can also outline what insights to look for after brushing a range.</p>
-            </div>
+            <div class="vis-container" id="ignition_cause_chart_div"></div>
         </div>
         <div class="column">
-            <div class="vis-container" id="overview_chart_div"></div>
+            <div class="discussion-pane">
+                <h3>Discussion: Ignition Cause</h3>
+                <p>Analyse the primary drivers of mega-fires. Discuss the significance of 'Natural' causes like lightning versus 'Undetermined' or other categories, and what this implies about fire management.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -256,6 +305,7 @@
     vegaEmbed('#climate_chart_div', 'climate_chart_temp.vl.json');
     vegaEmbed('#state_chart_div', 'state_chart.vl.json');
     vegaEmbed('#overview_chart_div', 'climate_chart_precip.vl.json');
+    vegaEmbed('#ignition_cause_chart_div', 'ignition_cause_chart.vl.json');
 </script>
 
 </body>
