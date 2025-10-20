@@ -1,0 +1,41 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 250,
+  "title": "Total Mega-Fire Area by Ignition Cause",
+  "data": {"url": "ignition_summary.csv"},
+  "mark": {
+    "type": "arc",
+    "innerRadius": 80,
+    "cornerRadius": 2,
+    "padAngle": 0.05,
+    "stroke": "#fff"
+  },
+  "encoding": {
+    "theta": {
+      "field": "TotalAreaHectares",
+      "type": "quantitative",
+      "stack": true
+    },
+    "color": {
+      "field": "IgnitionCause",
+      "type": "nominal",
+      "title": "Ignition Cause",
+      "scale": {"scheme": "redgrey"}
+    },
+    "tooltip": [
+      {"field": "IgnitionCause", "type": "nominal", "title": "Cause"},
+      {
+        "field": "TotalAreaHectares",
+        "type": "quantitative",
+        "title": "Total Area Burned (ha)",
+        "format": ",.0f"
+      },
+      {
+        "field": "FireCount",
+        "type": "quantitative",
+        "title": "Number of Fires"
+      }
+    ]
+  }
+}
