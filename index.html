@@ -84,6 +84,7 @@
             border-radius: 8px;
             overflow: hidden;
             background: #fff;
+            height: 100%;
         }
 
         .split-container {
@@ -192,7 +193,7 @@
                 </p>
                 <h3>Key Findings</h3>
                 <p>
-                    <strong>The ACT's Extreme Vulnerability:</strong> The most significant finding is the extreme vulnerability of the ACT. The data reveals that the 2003 Canberra bushfires burned an area equivalent to <strong>111.5%</strong> of the territory's entire landmass. This astonishing figure highlights that a single fire event can consume an entire administrative region, posing a unique threat to the nation's capital.
+                    <strong>The ACT's Extreme Vulnerability:</strong> The most significant finding is the extreme vulnerability of the ACT. The data reveals that the 2003 Canberra bushfires burned an area equivalent to <strong>111.5%</strong> of the territory's entire landmass. This astonishing figure, which is possible due to the fire re-burning some areas within the same perimeter, highlights that a single fire event can consume an area larger than an entire administrative region, posing a unique threat to the nation's capital.
                 </p>
                 <p>
                     <strong>Victoria's Repeated Catastrophes:</strong> Victoria shows the second-highest cumulative percentage burned. This is not due to one single event but a history of repeated, devastating fire seasons. Highlighting key years reveals the story: the 1939 "Black Friday" fires (14.7%), the 2006 fires (19.6%), and the 2009 "Black Saturday" fires (8.8%).
@@ -204,6 +205,30 @@
         </div>
         <div class="column">
             <div class="vis-container" id="state_chart_div"></div>
+        </div>
+    </div>
+</section>
+
+<section id="cause-section">
+    <h2>Total Area Burned by Ignition Cause</h2>
+    <div class="split-container">
+        <div class="column">
+            <div class="vis-container" id="ignition_cause_chart_div"></div>
+        </div>
+        <div class="column">
+            <div class="discussion-pane">
+                <h3>Discussion: Ignition Cause</h3>
+                <p>
+                    This chart breaks down the total area burned by mega-fires according to their recorded cause. Understanding the primary ignition sources is fundamental to fire management and prevention strategies.
+                </p>
+                <h3>Key Findings</h3>
+                <p>
+                    <strong>Dominance of Natural and Undetermined Causes:</strong> The data overwhelmingly shows that 'Natural' causes, primarily lightning strikes in remote areas, are responsible for the largest portion of the area burned by mega-fires. The 'Undetermined' category is also significant, reflecting the immense difficulty in pinpointing the exact origin of vast, fast-moving fires in inaccessible terrain.
+                </p>
+                <p>
+                    <strong>Implications for Management:</strong> The small proportion of area burned by 'Accidental' or 'Malicious' causes suggests that while preventing human-caused ignitions is important, the sheer scale of the problem is driven by natural events interacting with a flammable landscape. The large 'Undetermined' category also indicates a significant gap in knowledge. Focussing resources on determining the root causes of these major fires more accurately could help guide prevention efforts in the right direction. Ultimately, the data highlights the critical importance of landscape-scale fuel management and climate change mitigation, as these are the factors that determine whether a natural ignition event fizzles out or explodes into a catastrophic mega-fire.
+                </p>
+            </div>
         </div>
     </div>
 </section>
@@ -224,37 +249,52 @@
         <div class="column">
             <div class="discussion-pane">
                 <h3>Discussion: Temperature Trends</h3>
-                <p>Use this space to discuss the correlation between rising maximum temperatures and the frequency or scale of major fire seasons like the 2019 'Black Summer'.</p>
+                <p>
+                    This chart compares the total area burned by mega-fires each year with the average annual maximum temperature for Australia, revealing a potential correlation between heat and fire extent.
+                </p>
+                <h3>Key Findings</h3>
+                <p>
+                    <strong>Potential Correlation:</strong> Years with the most significant fire seasons, such as 2002-2003, 2011-2012, and the record-breaking 2019 season, often correspond to peaks in the temperature trend line. The 2019 "Black Summer" in particular occurred during the hottest year in this dataset, suggesting extreme heat can be a precondition for catastrophic fire events.
+                </p>
+                <p>
+                    <strong>A Nuanced Relationship:</strong> However, the correlation is not absolute. The annual fluctuations in average maximum temperature are relatively minor, typically varying by only 1-2 degrees Celsius from the mean. While a hotter year appears to increase risk, these small changes may not be the sole direct cause of a major fire season. Other factors, such as the preceding rainfall shown in the adjacent chart, likely play an equally or even more significant role in determining the severity of any given year.
+                </p>
             </div>
         </div>
         <div class="column">
             <div class="discussion-pane">
                 <h3>Discussion: The Rainfall Connection</h3>
                 <p>
-                    There is a strong visible correlation between years with low rainfall and years with a high total area burned by mega-fires.
-                    The orange circles on the precipitation chart highlight years where rainfall dropped by more than 100mm compared to the year prior.
+                    Of all the climate variables, annual precipitation appears to have the strongest and most immediate correlation with the extent of major bushfires. This chart highlights years where the annual rainfall dropped by more than 100mm compared to the previous year.
+                </p>
+                <h3>Key Findings</h3>
+                <p>
+                    <strong>A Strong Negative Correlation:</strong> There is a clear inverse relationship visible in the chart: troughs in the blue precipitation line frequently align with peaks in the red fire-area bars. This is particularly evident in major fire seasons like 2002, 2012, and the exceptionally dry year of 2019 which preceded the Black Summer fires.
                 </p>
                 <p>
-                    <strong>Finding:</strong> Our analysis shows that in these years of significant rainfall decline, there was an <strong>80% chance</strong> of an increase in the total area burned by mega-fires. This provides strong evidence that drought conditions are a key driver of catastrophic fire seasons.
+                    <strong>Quantifying the Risk:</strong> Our analysis of the 1990-2020 data quantifies this relationship. In years where there was a significant drop in rainfall (>100mm), there was an <strong>80% probability</strong> of an increase in the total area burned by mega-fires. This provides strong statistical evidence that widespread drought conditions are a critical precursor for catastrophic fire seasons, likely more so than minor fluctuations in temperature alone.
                 </p>
             </div>
         </div>
     </div>
 </section>
 
-<section id="cause-section">
-    <h2>Total Area Burned by Ignition Cause</h2>
-    <div class="split-container">
-        <div class="column">
-            <div class="vis-container" id="ignition_cause_chart_div"></div>
-        </div>
-        <div class="column">
-            <div class="discussion-pane">
-                <h3>Discussion: Ignition Cause</h3>
-                <p>Analyse the primary drivers of mega-fires. Discuss the significance of 'Natural' causes like lightning versus 'Undetermined' or other categories, and what this implies about fire management.</p>
-            </div>
-        </div>
-    </div>
+<section class="intro">
+    <h2>Conclusion and Further Thoughts: A Complex System</h2>
+    <p>
+        This dashboard has sought to unravel the complex interplay of factors that contribute to Australia's major bushfire seasons. The analysis reveals that no single variable tells the whole story; instead, we see a system where geography, climate, and cause interact to create conditions of extreme risk.
+        Our investigation into state-level impacts demonstrates that raw area burned can be a misleading metric. By normalising the data, we discovered that the <strong>relative impact</strong> of mega-fires on smaller regions like the ACT and Victoria is disproportionately severe. This highlights that societal and ecological damage is not solely a function of a fire's size, but its location.
+    </p><br>
+    <p>
+        Furthermore, the data on ignition causes confirms that the vast majority of area burned by these mega-fires originates from <strong>natural or undetermined sources</strong>. This suggests that while preventing human-caused ignitions is important, the fundamental challenge lies in managing vast, flammable landscapes prone to natural events like lightning.
+    </p><br>
+    <p>
+        Ultimately, the conditions that allow these ignitions to become catastrophes are driven by climate. While temperature plays a role, our analysis shows that <strong>annual precipitation is the most powerful predictor</strong>, with an 80% probability of increased fire area following a significant drop in rainfall.
+        These climate fluctuations are themselves often orchestrated by larger patterns, most notably the <strong>El Niño–Southern Oscillation (ENSO)</strong>. The severe 2002-2003 fire season aligns perfectly with a strong El Niño. Conversely, the massive 2010-2011 fire season occurred during a strong La Niña, illustrating the dangerous "growth-then-burn" cycle where wet years create abundant fuel for subsequent dry periods.
+    </p><br>
+    <p>
+        In conclusion, this data-driven analysis paints a picture of a continent on a knife's edge. Australia's fire risk is a complex interplay of geography and multi-year climate cycles. As global temperatures continue to rise and exacerbate these natural cycles, the insights gained from visualisations like this become ever more critical for understanding and preparing for the future.
+    </p>
 </section>
 
 <footer>
