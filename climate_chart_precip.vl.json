@@ -27,8 +27,13 @@
     },
     {
       "data": {"url": "climate_summary.csv"},
-      "transform": [{"filter": "datum.Year >= 1990 && datum.Year <= 2020"}],
-      "mark": {"type": "line", "color": "#3498db", "strokeWidth": 2, "point": true},
+      "transform": [
+        {"filter": "datum.Year >= 1990 && datum.Year <= 2020"},
+        {
+          "calculate": "(datum.Year == 1994 || datum.Year == 2002 || datum.Year == 2012 || datum.Year == 2019) ? 'highlight' : 'normal'",
+          "as": "highlight_flag"
+        }
+      ],
       "encoding": {
         "x": {"field": "Year", "type": "ordinal", "title": "Year"},
         "y": {
@@ -45,7 +50,32 @@
             "format": ".0f"
           }
         ]
-      }
+      },
+      "layer": [
+        {
+          "mark": {"type": "line", "color": "#3498db", "strokeWidth": 2}
+        },
+        {
+          "mark": {"type": "point", "filled": true, "stroke": "black"},
+          "encoding": {
+            "color": {
+              "condition": {"test": "datum.highlight_flag == 'highlight'", "value": "#c0392b"},
+              "value": "#555555"
+            },
+            "size": {
+              "condition": {"test": "datum.highlight_flag == 'highlight'", "value": 150},
+              "value": 25
+            },
+            "strokeWidth": {
+              "condition": {"test": "datum.highlight_flag == 'highlight'", "value": 1.5},
+              "value": 0.5
+            },
+            "opacity": {
+              "condition": {"test": "datum.highlight_flag == 'highlight'", "value": 1}
+            }
+          }
+        }
+      ]
     }
   ],
   "resolve": {"scale": {"y": "independent"}}
