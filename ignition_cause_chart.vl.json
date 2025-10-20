@@ -1,12 +1,12 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": "container",
-  "height": 250,
+  "height": "container",
   "title": "Total Mega-Fire Area by Ignition Cause",
   "data": {"url": "ignition_summary.csv"},
   "mark": {
     "type": "arc",
-    "innerRadius": 80,
+    "innerRadius": 140,
     "cornerRadius": 2,
     "padAngle": 0.05,
     "stroke": "#fff"

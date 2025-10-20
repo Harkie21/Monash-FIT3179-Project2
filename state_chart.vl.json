@@ -1,8 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": "container",
-  "height": 420,
-  "autosize": {"type": "fit-x", "contains": "padding"},
+  "height": "container",
   "data": {"url": "fires_deduplicated_summary2.csv"},
   "transform": [
     {"filter": "datum.Year >= 1993 && datum.Year <= 2023"},
