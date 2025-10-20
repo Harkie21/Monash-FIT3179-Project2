@@ -1,0 +1,52 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 250,
+  "title": "Annual Mega-Fire Area vs. Precipitation",
+  "layer": [
+    {
+      "data": {"url": "fires_deduplicated_summary.csv"},
+      "transform": [{"filter": "datum.Year >= 1990 && datum.Year <= 2020"}],
+      "mark": {"type": "bar", "color": "#c0392b"},
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal", "title": "Year"},
+        "y": {
+          "field": "AreaMillionHectares",
+          "type": "quantitative",
+          "title": "Mega-Fire Area (million ha)"
+        },
+        "tooltip": [
+          {"field": "Year", "type": "ordinal"},
+          {
+            "field": "AreaMillionHectares",
+            "title": "Area Burned (M ha)",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {"url": "climate_summary.csv"},
+      "transform": [{"filter": "datum.Year >= 1990 && datum.Year <= 2020"}],
+      "mark": {"type": "line", "color": "#3498db", "strokeWidth": 2, "point": true},
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal", "title": "Year"},
+        "y": {
+          "field": "Precipitation",
+          "type": "quantitative",
+          "title": "Precipitation (mm)",
+          "axis": {"orient": "right", "grid": false}
+        },
+        "tooltip": [
+          {"field": "Year", "type": "ordinal"},
+          {
+            "field": "Precipitation",
+            "title": "Precipitation (mm)",
+            "format": ".0f"
+          }
+        ]
+      }
+    }
+  ],
+  "resolve": {"scale": {"y": "independent"}}
+}

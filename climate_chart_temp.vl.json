@@ -1,0 +1,74 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 250,
+  "title": "Annual Mega-Fire Area vs. Maximum Temperature",
+  "layer": [
+    {
+      "data": {"url": "fires_deduplicated_summary.csv"},
+      "transform": [{"filter": "datum.Year >= 1990 && datum.Year <= 2020"}],
+      "mark": {"type": "bar", "color": "#c0392b"},
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal", "title": "Year"},
+        "y": {
+          "field": "AreaMillionHectares",
+          "type": "quantitative",
+          "title": "Mega-Fire Area (million ha)"
+        },
+        "tooltip": [
+          {"field": "Year", "type": "ordinal"},
+          {
+            "field": "AreaMillionHectares",
+            "title": "Area Burned (M ha)",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {"url": "climate_summary.csv"},
+      "transform": [{"filter": "datum.Year >= 1990 && datum.Year <= 2020"}],
+      "mark": {"type": "line", "color": "#E07A5F", "strokeWidth": 2, "point": true},
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal", "title": "Year"},
+        "y": {
+          "field": "MaxTemp",
+          "type": "quantitative",
+          "title": "Avg. Max Temperature (°C)",
+          "axis": {"orient": "right", "grid": false}
+        },
+        "tooltip": [
+          {"field": "Year", "type": "ordinal"},
+          {
+            "field": "MaxTemp",
+            "title": "Avg. Max Temp (°C)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {"values": [{"Year": "2019"}]},
+      "layer": [
+        {
+          "mark": {"type": "rule", "strokeDash": [2, 2], "color": "#3D405B"}
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "dx": 5,
+            "dy": -130,
+            "fontSize": 11,
+            "fontStyle": "italic",
+            "color": "#3D405B"
+          },
+          "encoding": {"text": {"value": "'Black Summer' Season"}}
+        }
+      ],
+      "encoding": {"x": {"field": "Year", "type": "ordinal"}}
+    }
+  ],
+  "resolve": {"scale": {"y": "independent"}}
+}

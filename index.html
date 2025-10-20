@@ -253,9 +253,9 @@
         citySelect.addEventListener('change', syncZoomControl);
     }).catch(console.error);
 
-    vegaEmbed('#climate_chart_div', 'climate_chart.vl.json');
+    vegaEmbed('#climate_chart_div', 'climate_chart_temp.vl.json');
     vegaEmbed('#state_chart_div', 'state_chart.vl.json');
-    vegaEmbed('#overview_chart_div', 'overview_chart.vl.json');
+    vegaEmbed('#overview_chart_div', 'climate_chart_precip.vl.json');
 </script>
 
 </body>
