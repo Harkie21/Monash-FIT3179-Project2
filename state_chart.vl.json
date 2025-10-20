@@ -7,8 +7,28 @@
   "transform": [
     {"filter": "datum.Year >= 1993 && datum.Year <= 2023"},
     {
+      "lookup": "State",
+      "from": {
+        "data": {
+          "values": [
+            {"StateName": "WA (Western Australia)", "TotalAreaHa": 252987500},
+            {"StateName": "QLD (Queensland)", "TotalAreaHa": 173064800},
+            {"StateName": "NT (Northern Territory)", "TotalAreaHa": 134912900},
+            {"StateName": "SA (South Australia)", "TotalAreaHa": 98348200},
+            {"StateName": "NSW (New South Wales)", "TotalAreaHa": 80064200},
+            {"StateName": "VIC (Victoria)", "TotalAreaHa": 22741600},
+            {"StateName": "TAS (Tasmania)", "TotalAreaHa": 6840100},
+            {"StateName": "ACT (Australian Capital Territory)", "TotalAreaHa": 235800}
+          ]
+        },
+        "key": "StateName",
+        "fields": ["TotalAreaHa"]
+      }
+    },
+    {"calculate": "(datum.AreaHectares / datum.TotalAreaHa) * 100", "as": "PercentBurned"},
+    {
       "joinaggregate": [
-        {"op": "sum", "field": "AreaMillionHectares", "as": "TotalAreaState"}
+        {"op": "sum", "field": "PercentBurned", "as": "TotalPercentState"}
       ],
       "groupby": ["State"]
     }
@@ -33,13 +53,13 @@
           "field": "State",
           "type": "nominal",
           "title": "State",
-          "sort": {"field": "TotalAreaState", "order": "descending"}
+          "sort": {"field": "TotalPercentState", "order": "descending"}
         },
         "x": {
           "aggregate": "sum",
-          "field": "AreaMillionHectares",
+          "field": "PercentBurned",
           "type": "quantitative",
-          "title": "Total Area Burned (Million Hectares)"
+          "title": "Percentage of Total Land Area Burned (%)"
         },
         "order": {"field": "Year", "type": "ordinal"},
         "color": {
@@ -50,25 +70,25 @@
         },
         "tooltip": [
           {"field": "State", "type": "nominal"},
-          {"field": "Year", "type": "ordinal", "title": "Year"},
-          {"aggregate": "sum", "field": "AreaMillionHectares", "type": "quantitative", "title": "Area (M ha)", "format": ".2f"}
+          {"field": "Year", "type": "ordinal"},
+          {"aggregate": "sum", "field": "PercentBurned", "type": "quantitative", "title": "Percent Burned", "format": ".3f"}
         ]
       }
     },
     {
       "transform": [
-        {"filter": "year_highlight == null ? false : (isArray(year_highlight) ? indexof(year_highlight, toString(datum.Year)) >= 0 : toString(datum.Year) == toString(year_highlight))"}
+        {"filter": "year_highlight != null && datum.Year == year_highlight"}
       ],
       "mark": {"type": "bar", "color": "#8B0000"},
       "encoding": {
         "y": {
           "field": "State",
           "type": "nominal",
-          "sort": {"field": "TotalAreaState", "order": "descending"}
+          "sort": {"field": "TotalPercentState", "order": "descending"}
         },
         "x": {
           "aggregate": "sum",
-          "field": "AreaMillionHectares",
+          "field": "PercentBurned",
           "type": "quantitative"
         },
         "order": {"field": "Year", "type": "ordinal"}
@@ -76,21 +96,35 @@
     },
     {
       "transform": [
-        {"filter": "year_highlight == null ? false : (isArray(year_highlight) ? indexof(year_highlight, toString(datum.Year)) >= 0 : toString(datum.Year) == toString(year_highlight))"},
+        {"filter": "year_highlight != null && datum.Year == year_highlight"},
         {
           "aggregate": [
-            {"op": "sum", "field": "AreaMillionHectares", "as": "SelAreaM"},
-            {"op": "sum", "field": "AreaHectares", "as": "SelAreaHa"}
+            {"op": "sum", "field": "PercentBurned", "as": "SelPercentBurned"},
+            {"op": "sum", "field": "AreaHectares", "as": "SelAreaHectares"}
           ],
           "groupby": ["State"]
         },
-        {"calculate": "format(datum.SelAreaHa, ',.0f') + ' ha'", "as": "SelAreaHaLabel"}
+        {
+          "calculate": "format(datum.SelPercentBurned, '.2f') + '% (' + format(datum.SelAreaHectares, ',.0f') + ' ha)'",
+          "as": "SelLabel"
+        }
       ],
-      "mark": {"type": "text", "align": "left", "baseline": "middle", "dx": 4, "fontSize": 11, "color": "#333333"},
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 4,
+        "fontSize": 11,
+        "color": "#333333"
+      },
       "encoding": {
-        "y": {"field": "State", "type": "nominal", "sort": {"field": "TotalAreaState", "order": "descending"}},
-        "x": {"field": "SelAreaM", "type": "quantitative"},
-        "text": {"field": "SelAreaHaLabel", "type": "nominal"}
+        "y": {
+          "field": "State",
+          "type": "nominal",
+          "sort": {"field": "TotalPercentState", "order": "descending"}
+        },
+        "x": {"field": "SelPercentBurned", "type": "quantitative"},
+        "text": {"field": "SelLabel", "type": "nominal"}
       }
     }
   ]
