@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": "container",
-  "height": 250,
+  "height": 350,
   "title": "Annual Mega-Fire Area vs. Maximum Temperature",
   "layer": [
     {
@@ -51,6 +51,28 @@
           }
         ]
       }
+    },
+    {
+      "data": {"values": [{"Year": "2019"}]},
+      "layer": [
+        {
+          "mark": {"type": "rule", "strokeDash": [3, 3], "color": "#3D405B"}
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "top",
+            "dx": -60,
+            "dy": 215,
+            "fontSize": 11,
+            "fontStyle": "italic",
+            "color": "#3D405B"
+          },
+          "encoding": {"text": {"value": "'Black Summer' Season"}}
+        }
+      ],
+      "encoding": {"x": {"field": "Year", "type": "ordinal"}}
     }
   ],
   "resolve": {"scale": {"y": "independent"}}

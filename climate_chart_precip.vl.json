@@ -88,6 +88,28 @@
           }
         }
       ]
+    },
+    {
+      "data": {"values": [{"Year": "2019"}]},
+      "layer": [
+        {
+          "mark": {"type": "rule", "strokeDash": [3, 3], "color": "#3D405B"}
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "top",
+            "dx": -60,
+            "dy": 225,
+            "fontSize": 11,
+            "fontStyle": "italic",
+            "color": "#3D405B"
+          },
+          "encoding": {"text": {"value": "'Black Summer' Season"}}
+        }
+      ],
+      "encoding": {"x": {"field": "Year", "type": "ordinal"}}
     }
   ],
   "resolve": {"scale": {"y": "independent"}}
